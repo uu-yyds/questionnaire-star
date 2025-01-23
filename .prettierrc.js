@@ -4,7 +4,7 @@ module.exports = {
   // 括号内不要出现空格
   bracketSpacing: false,
   // 行结束符使用Unix格式
-  endOfLine: 'crlf',
+  endOfLine: 'lf',
   // true: Put > on the last line instead of at a new line
   jsxBracketSameLine: false,
   // 换行方式
