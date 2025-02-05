@@ -1,12 +1,14 @@
 import React from 'react';
-import QuestionPage from './pages/QuestionPage/QuestionPage';
 import { GlobalStyle } from './styles/Global';
+import { RouterProvider } from 'react-router-dom';
+import routerConfig from './routers';
+import 'antd/dist/reset.css';
 
 function App() {
   return (
     <div className="App">
       <GlobalStyle />
-      <QuestionPage />
+      <RouterProvider router={routerConfig} />
     </div>
   );
 }

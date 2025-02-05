@@ -1,6 +1,7 @@
 import React from 'react';
 import { Question } from '../../types/QuestionPage';
 import QuestionCard from './QuestionCard';
+import { Modal, message } from 'antd';
 
 interface QuestionListProps {
   questionsList: Question[];
@@ -11,7 +12,16 @@ const QuestionList = (props: QuestionListProps) => {
   const { questionsList, setQuestionsList } = props;
   const handleDelete = (id: string) => {
     console.log('删除', id);
-    setQuestionsList(questionsList.filter(q => q.id !== id));
+    Modal.confirm({
+      title: '删除问卷',
+      content: '确定删除该问卷吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        setQuestionsList(questionsList.filter(q => q.id !== id));
+        message.success('删除成功');
+      },
+    });
   };
   const handlePublish = (id: string, isPublished: boolean) => {
     console.log('发布', id);

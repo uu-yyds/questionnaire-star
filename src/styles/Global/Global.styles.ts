@@ -30,7 +30,6 @@ export const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none; /* 去掉链接的下划线 */
-    color: inherit; /* 继承文本颜色 */
   }
 
   img {

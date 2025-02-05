@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import QuestionList from '../../components/QuestionPage/QuestionList';
 import { Question } from '../../types/QuestionPage';
-import { Button, Input } from 'antd';
+import { Button, Input, Typography, Empty } from 'antd';
 import { QuestionPageContainer, QuestionPageTitle } from '../../styles/QuestionPage';
+import ListSearch from '../../components/Common/ListSearch';
 
 const QuestionPage = () => {
   const [questionsList, setQuestionsList] = useState<Question[]>();
@@ -62,15 +63,17 @@ const QuestionPage = () => {
   return (
     <QuestionPageContainer>
       <QuestionPageTitle>
-        我的问卷
-        <div className="question-page-title-right">
-          <Input placeholder="请输入问卷标题" />
-        </div>
+        <Typography.Title level={4}>我的问卷</Typography.Title>
+        <ListSearch />
       </QuestionPageTitle>
-      <QuestionList questionsList={questionsList || []} setQuestionsList={setQuestionsList} />
-      <Button type="primary" onClick={handleCreateQuestion}>
-        创建问卷
-      </Button>
+      {questionsList?.length ? (
+        <>
+          <QuestionList questionsList={questionsList} setQuestionsList={setQuestionsList} />
+          <div className="question-page-load-more">加载更多</div>
+        </>
+      ) : (
+        <Empty description="暂无问卷" />
+      )}
     </QuestionPageContainer>
   );
 };

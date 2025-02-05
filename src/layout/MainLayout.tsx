@@ -1,12 +1,29 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { MainLayoutWrapper } from '../styles/Layout';
+import { Layout } from 'antd';
+import Logo from '../components/MainLayout/Logo';
+import UserInfo from '../components/MainLayout/UserInfo';
+
 const MainLayout = () => {
+  const { Header, Footer, Content } = Layout;
   return (
-    <>
-      <div>MainLayoutHeader</div>
-      <Outlet />
-      <div>MainLayoutFooter</div>
-    </>
+    <MainLayoutWrapper>
+      <Layout>
+        <Header className="header">
+          <div className="left">
+            <Logo />
+          </div>
+          <div className="right">
+            <UserInfo />
+          </div>
+        </Header>
+        <Content className="main">
+          <Outlet />
+        </Content>
+        <Footer className="footer">小鱼问卷 &copy; 2024 - present. Created by 小鱼</Footer>
+      </Layout>
+    </MainLayoutWrapper>
   );
 };
 

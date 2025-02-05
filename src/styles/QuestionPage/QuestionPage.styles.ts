@@ -2,18 +2,25 @@ import styled from 'styled-components';
 
 export const QuestionPageContainer = styled.div`
   padding: 20px;
-  background-color: #f0f0f0;
+
+  .question-page-load-more {
+    margin-top: 20px;
+    text-align: center;
+    color: #1890ff;
+    cursor: pointer;
+  }
 `;
 
 export const QuestionPageTitle = styled.div`
-  font-size: 24px;
-  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 
   .question-page-title-right {
-    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
   }
 `;

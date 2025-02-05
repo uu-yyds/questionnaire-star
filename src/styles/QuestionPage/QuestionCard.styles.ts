@@ -30,8 +30,7 @@ export const QuestionItem = styled.div`
 
     .question-title {
       flex: 1;
-      font-size: 16px;
-      font-weight: bold;
+      font-size: 14px;
     }
 
     .question-top-right {

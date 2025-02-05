@@ -2,7 +2,17 @@ import React from 'react';
 import { Question } from '../../types/QuestionPage';
 import { QuestionItem } from '../../styles/QuestionPage';
 import { useFormatDate } from '../../hooks';
-import { Button } from 'antd';
+import { Button, Space, Tag, Modal, message } from 'antd';
+import {
+  EditOutlined,
+  LineChartOutlined,
+  StarFilled,
+  StarOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+} from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
+import { QUESTION_EDIT_PATHNAME, QUESTION_STAT_PATHNAME } from '../../constants';
 interface QuestionCardProps {
   question: Question;
   handleDelete: (id: string) => void;
@@ -13,43 +23,86 @@ interface QuestionCardProps {
 const QuestionCard = (props: QuestionCardProps) => {
   const { question, handleDelete, handlePublish, handleStar } = props;
   const { id, title, isPublished, createdAt, isStar, answerCount } = question;
+  const navigate = useNavigate();
   const formatDate = useFormatDate(createdAt, 'MM月DD日 HH:mm');
-  const handleEdit = (id: string) => {
-    console.log('编辑', id);
-  };
+
   const handleCopy = (id: string) => {
     console.log('复制', id);
+    Modal.confirm({
+      title: '复制问卷',
+      content: '确定复制该问卷吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        console.log('复制');
+        message.success('复制成功');
+      },
+    });
   };
+
   return (
     <QuestionItem key={id}>
       <div className="question-item-top">
-        <div className="question-title">{title}</div>
+        <Link
+          to={isPublished ? QUESTION_STAT_PATHNAME + `/${id}` : QUESTION_EDIT_PATHNAME + `/${id}`}
+          className="question-title"
+        >
+          <Space>
+            {isStar && <StarFilled style={{ color: 'red' }} />}
+            {title}
+          </Space>
+        </Link>
         <div className="question-top-right">
-          {isPublished ? (
-            <div className="isPublished">已发布</div>
-          ) : (
-            <div className="isPublished">未发布</div>
-          )}
-          <div className="question-top-right-answer">答卷：{answerCount}</div>
-          <div className="question-top-right-date">{formatDate}</div>
+          <Space>
+            {isPublished ? <Tag color="processing">已发布</Tag> : <Tag color="default">未发布</Tag>}
+            <div className="question-top-right-answer">答卷：{answerCount}</div>
+            <div className="question-top-right-date">{formatDate}</div>
+          </Space>
         </div>
       </div>
       <div className="question-item-bottom">
-        <Button type="primary" onClick={() => handleEdit(id)}>
-          编辑
-        </Button>
-        <Button>数据统计</Button>
-        <div className="question-item-bottom-right">
-          <Button type="text" onClick={() => handleStar(id, isStar)}>
-            {isStar ? '取消收藏' : '收藏'}
+        <Space>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => navigate(QUESTION_EDIT_PATHNAME + `/${id}`)}
+          >
+            <EditOutlined />
+            编辑
           </Button>
-          <Button type="text" onClick={() => handleCopy(id)}>
+          <Button
+            type="text"
+            size="small"
+            onClick={() => navigate(QUESTION_STAT_PATHNAME + `/${id}`)}
+            disabled={!isPublished}
+          >
+            <LineChartOutlined />
+            数据统计
+          </Button>
+        </Space>
+        <Space className="question-item-bottom-right">
+          <Button type="text" size="small" onClick={() => handleStar(id, isStar)}>
+            {isStar ? (
+              <Space>
+                <StarFilled />
+                取消收藏
+              </Space>
+            ) : (
+              <Space>
+                <StarOutlined />
+                收藏
+              </Space>
+            )}
+          </Button>
+          <Button type="text" size="small" onClick={() => handleCopy(id)}>
+            <CopyOutlined />
             复制
           </Button>
-          <Button type="text" onClick={() => handleDelete(id)}>
+          <Button type="text" size="small" onClick={() => handleDelete(id)}>
+            <DeleteOutlined />
             删除
           </Button>
-        </div>
+        </Space>
       </div>
     </QuestionItem>
   );
