@@ -1,64 +1,91 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import QuestionList from '../../components/QuestionPage/QuestionList';
-import { Question } from '../../types/QuestionPage';
-import { Button, Input, Typography, Empty } from 'antd';
+import { Typography, Empty, Spin, message } from 'antd';
 import { QuestionPageContainer, QuestionPageTitle } from '../../styles/QuestionPage';
 import ListSearch from '../../components/Common/ListSearch';
+import { getQuestionList } from '../../services/question';
+import { QuestionInfo } from '../../types/QuestionPage';
+import { useSearchParams } from 'react-router-dom';
+import { useDebounceFn, useRequest, useVirtualList } from 'ahooks';
+import { LIST_PAGE_SIZE, LIST_SEARCH_PARAM_KEY } from '../../constants';
+import { useTitle } from 'ahooks';
 
 const QuestionPage = () => {
-  const [questionsList, setQuestionsList] = useState<Question[]>();
-  const newQuestionsList: Question[] = [
-    {
-      id: 'q1',
-      title: '问卷一',
-      isPublished: false,
-      createdAt: '2025-01-01',
-      isStar: false,
-      answerCount: Math.floor(Math.random() * 100),
+  useTitle('我的问卷');
+  const [questionsList, setQuestionsList] = useState<QuestionInfo[]>([]);
+  const [total, setTotal] = useState(0);
+  const [pageSize, setPageSize] = useState(LIST_PAGE_SIZE);
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY) || '';
+
+  const hasLoadMore = useMemo(() => questionsList.length < total, [questionsList, total]);
+
+  // 搜索关键字变化时，收藏/删除变化时，重置列表
+  useEffect(() => {
+    setQuestionsList([]);
+    setPageSize(LIST_PAGE_SIZE);
+    setTotal(0);
+  }, [keyword]);
+
+  const { run: loadMore, loading: loadMoreLoading } = useRequest(
+    async () => {
+      const res = await getQuestionList({
+        pageSize: pageSize + LIST_PAGE_SIZE,
+        keyword: keyword || undefined,
+      });
+      setQuestionsList(res.list);
+      setPageSize(pageSize + LIST_PAGE_SIZE);
     },
-    {
-      id: 'q2',
-      title: '问卷二',
-      isPublished: true,
-      createdAt: '2025-01-02',
-      isStar: false,
-      answerCount: Math.floor(Math.random() * 100),
+    { manual: true }
+  );
+
+  const { run: tryLoadMore } = useDebounceFn(
+    async () => {
+      const elem = loadMoreRef.current;
+      if (elem) {
+        const domRect = elem.getBoundingClientRect();
+        if (domRect.bottom <= document.body.clientHeight) {
+          loadMore();
+        }
+      }
     },
-    {
-      id: 'q3',
-      title: '问卷三',
-      isPublished: true,
-      createdAt: '2025-01-03',
-      isStar: false,
-      answerCount: Math.floor(Math.random() * 100),
-    },
-    {
-      id: 'q4',
-      title: '问卷四',
-      isPublished: false,
-      createdAt: '2025-01-04',
-      isStar: false,
-      answerCount: Math.floor(Math.random() * 100),
-    },
-  ];
+    { wait: 500 }
+  );
+
+  const InitQuestionList = async () => {
+    try {
+      const res = await getQuestionList({ keyword: keyword || undefined });
+      setQuestionsList(res.list);
+      setTotal(res.total);
+      setLoading(false);
+    } catch (error: any) {
+      message.error('获取问卷列表失败');
+    }
+  };
 
   useEffect(() => {
-    setQuestionsList(newQuestionsList);
-  }, []);
+    setLoading(true);
+    InitQuestionList();
+  }, [searchParams]);
 
-  const handleCreateQuestion = () => {
-    setQuestionsList([
-      ...(questionsList || []),
-      {
-        id: 'q5' + Math.random().toString(36).substring(2, 15),
-        title: '问卷',
-        isPublished: false,
-        createdAt: new Date().toString(),
-        isStar: false,
-        answerCount: Math.floor(Math.random() * 100),
-      },
-    ]);
-  };
+  useEffect(() => {
+    if (hasLoadMore) {
+      window.addEventListener('scroll', tryLoadMore);
+    }
+    return () => {
+      window.removeEventListener('scroll', tryLoadMore);
+    };
+  }, [hasLoadMore, searchParams, loading]);
+
+  // 虚拟列表
+  // const { list, containerProps, wrapperProps, itemProps } = useVirtualList(questionsList, {
+  //   itemHeight: 100,
+  //   containerTarget: loadMoreRef,
+  //   wrapperTarget: loadMoreRef,
+  // });
 
   return (
     <QuestionPageContainer>
@@ -66,14 +93,24 @@ const QuestionPage = () => {
         <Typography.Title level={4}>我的问卷</Typography.Title>
         <ListSearch />
       </QuestionPageTitle>
-      {questionsList?.length ? (
-        <>
-          <QuestionList questionsList={questionsList} setQuestionsList={setQuestionsList} />
-          <div className="question-page-load-more">加载更多</div>
-        </>
-      ) : (
-        <Empty description="暂无问卷" />
-      )}
+      <Spin spinning={loading}>
+        {questionsList?.length ? (
+          <>
+            <QuestionList questionsList={questionsList} onFinish={InitQuestionList} />
+            {hasLoadMore ? (
+              <Spin spinning={loadMoreLoading}>
+                <div className="load-more" ref={loadMoreRef}>
+                  上滑动加载更多...
+                </div>
+              </Spin>
+            ) : (
+              <div className="load-more">没有更多了</div>
+            )}
+          </>
+        ) : (
+          <Empty description="暂无问卷" />
+        )}
+      </Spin>
     </QuestionPageContainer>
   );
 };

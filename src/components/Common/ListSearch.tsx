@@ -2,7 +2,7 @@ import React, { useState, ChangeEvent, useEffect } from 'react';
 import { Input } from 'antd';
 import { QuestionPageTitle } from '../../styles/QuestionPage/QuestionPage.styles';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { QUESTIONNAIRE_TITLE } from '../../constants';
+import { LIST_SEARCH_PARAM_KEY } from '../../constants';
 
 const ListSearch = () => {
   const { Search } = Input;
@@ -12,20 +12,18 @@ const ListSearch = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const questionnaireTitle = searchParams.get(QUESTIONNAIRE_TITLE);
-    setSearchValue(questionnaireTitle || '');
+    const keyword = searchParams.get(LIST_SEARCH_PARAM_KEY);
+    setSearchValue(keyword || '');
   }, [searchParams]);
 
   const handleSearch = (value: string) => {
-    console.log(value);
     navigate({
       pathname,
-      search: `?${QUESTIONNAIRE_TITLE}=${value}`,
+      search: `?${LIST_SEARCH_PARAM_KEY}=${value}`,
     });
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('event', event?.target.value);
     setSearchValue(event?.target.value || '');
   };
 
@@ -33,7 +31,7 @@ const ListSearch = () => {
     <QuestionPageTitle>
       <div className="question-page-title-right">
         <Search
-          placeholder="请输入问卷标题"
+          placeholder="请输入关键字"
           size="large"
           allowClear
           onSearch={handleSearch}

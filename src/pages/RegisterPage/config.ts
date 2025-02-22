@@ -1,5 +1,6 @@
 export const USER_NAME_KEY = 'username';
 export const PASSWORD_KEY = 'password';
+export const NICKNAME_KEY = 'nickname';
 export const REMEMBER_ME_KEY = 'remember';
 export const CONFIRM_PASSWORD_KEY = 'confirmPassword';
 export const REGISTER_BUTTON_LINK_KEY = 'registerLink';
@@ -21,6 +22,16 @@ export const formConfig = (): IFormItem[] => {
         { type: 'string', pattern: /^[a-zA-Z0-9_]+$/, message: '用户名只能包含数字、字母和下划线' },
         { type: 'string', min: 5, max: 20, message: '用户名长度在5-20个字符之间' },
       ],
+    },
+    {
+      type: FormItemType.Input,
+      label: '昵称',
+      name: NICKNAME_KEY,
+      option: {
+        placeholder: '请输入昵称',
+        size: 'large',
+      },
+      rules: [{ required: true, message: '请输入昵称' }],
     },
     {
       type: FormItemType.Password,
@@ -59,7 +70,7 @@ export const formConfig = (): IFormItem[] => {
       name: REGISTER_BUTTON_LINK_KEY,
       option: {
         to: LOGIN_PATHNAME,
-        linkText: '已有账号？去登录',
+        linktext: '已有账号？去登录',
         type: 'primary',
         htmlType: 'submit',
         size: 'large',

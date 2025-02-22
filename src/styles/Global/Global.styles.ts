@@ -55,4 +55,8 @@ export const GlobalStyle = createGlobalStyle`
     border-collapse: collapse; /* 合并表格边框 */
     border-spacing: 0; /* 去掉表格单元格的间距 */
   }
+
+  div[role='button'] {
+    outline: none;
+  }
 `;

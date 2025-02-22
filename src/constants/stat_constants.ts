@@ -1,0 +1,3 @@
+const STAT_CHART_COLORS = ['#FF2D2D', '#BE77FF', '#2894FF', '#00EC00', '#EAC100', '#FF9D6F'];
+
+export { STAT_CHART_COLORS };

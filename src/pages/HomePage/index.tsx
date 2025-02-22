@@ -3,10 +3,13 @@ import { Button, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { MANAGE_PATHNAME } from '../../constants';
 import { HomePageWrapper } from '../../styles/HomePage';
+import { useTitle } from '../../hooks/useTitle';
 
 const Home = () => {
+  useTitle('首页');
   const navigate = useNavigate();
   const { Title, Paragraph } = Typography;
+
   return (
     <HomePageWrapper>
       <div>

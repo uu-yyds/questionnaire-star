@@ -3,11 +3,17 @@ import styled from 'styled-components';
 export const QuestionPageContainer = styled.div`
   padding: 20px;
 
-  .question-page-load-more {
+  .load-more {
     margin-top: 20px;
     text-align: center;
     color: #1890ff;
     cursor: pointer;
+  }
+
+  .ant-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
   }
 `;
 

@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Typography, Form, Input, Checkbox } from 'antd';
+import { Space, Typography, Form, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { LoginPageWrapper } from '../../styles/LoginPage';
 import { UserOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
 import { REGISTER_PATHNAME, HOME_PATHNAME } from '../../constants';
 import { localCacheService } from '../../utils';
 import { USER_NAME_KEY, PASSWORD_KEY, REMEMBER_ME_KEY, CONFIRM_PASSWORD_KEY } from './config';
 import { formRender } from '../../components/Common/FormRender';
 import { formConfig } from './config';
+import { login } from '../../services/user';
+import { TOKEN_KEY } from '../../constants';
+import { LoginResponse } from '../../types/LoginPage';
+import { useDispatch } from 'react-redux';
+import { setIsLogin, setUserInfo } from '../../stores/user_reducers';
+import { useTitle } from '../../hooks/useTitle';
 
 const LoginPage = () => {
+  useTitle('登录');
   const navigate = useNavigate();
   const { Title } = Typography;
   const [form] = Form.useForm();
   const [isRememberMe, setIsRememberMe] = useState(true);
-  const [inputPassword, setInputPassword] = useState('');
-  const [inputConfirmPassword, setInputConfirmPassword] = useState('');
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const { username, password } = getUserInfo();
     if (username && password) {
@@ -31,7 +37,6 @@ const LoginPage = () => {
   };
 
   const onFinish = (values: any) => {
-    console.log(values);
     const { username, password, remember } = values;
     // 判断是否记住我
     if (remember) {
@@ -41,7 +46,17 @@ const LoginPage = () => {
       localCacheService.remove(USER_NAME_KEY);
       localCacheService.remove(PASSWORD_KEY);
     }
-    navigate(HOME_PATHNAME);
+    login({ username, password })
+      .then((res: LoginResponse) => {
+        const { username, nickname, access_token } = res;
+        localCacheService.set(TOKEN_KEY, access_token);
+        dispatch(setIsLogin(true));
+        dispatch(setUserInfo({ username, nickname }));
+        navigate(HOME_PATHNAME);
+      })
+      .catch((error: any) => {
+        message.error(error?.data?.message);
+      });
   };
 
   const onChangeRememberMe = (e: any) => {

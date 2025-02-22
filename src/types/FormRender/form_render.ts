@@ -16,12 +16,21 @@ export interface IFormItem {
   span?: number;
   offset?: number;
   dependencies?: string[];
+  service?: {
+    params?: any;
+    serviceApi?: (params?: any) => Promise<any>;
+  };
+  value?: string;
 }
 
 export enum FormItemType {
   Input = 'Input',
+  Textarea = 'Textarea',
   Checkbox = 'Checkbox',
   Button = 'Button',
   Password = 'Password',
   ButtonLink = 'ButtonLink',
+  Select = 'Select',
+  Switch = 'Switch',
+  Array = 'Array',
 }

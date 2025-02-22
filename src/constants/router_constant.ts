@@ -8,6 +8,7 @@ const MANAGE_TRASH_PATHNAME = '/manage/trash';
 const QUESTION_LIST_PATHNAME = '/question/list';
 const QUESTION_EDIT_PATHNAME = '/question/edit';
 const QUESTION_STAT_PATHNAME = '/question/stat';
+const NOT_FOUND = '/not-found';
 
 export {
   HOME_PATHNAME,
@@ -20,4 +21,19 @@ export {
   QUESTION_LIST_PATHNAME,
   QUESTION_EDIT_PATHNAME,
   QUESTION_STAT_PATHNAME,
+  NOT_FOUND,
+};
+
+export const isLoginOrRegister = (pathname: string) => {
+  if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) {
+    return true;
+  }
+  return false;
+};
+
+export const isNoNeedUserInfo = (pathname: string) => {
+  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) {
+    return true;
+  }
+  return false;
 };

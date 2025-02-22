@@ -53,22 +53,22 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: '/question',
-        element: <QuestionLayout />,
-        children: [
-          {
-            path: 'edit/:id',
-            element: <EditPage />,
-          },
-          {
-            path: 'stat/:id',
-            element: <StatPage />,
-          },
-        ],
-      },
-      {
         path: '*',
         element: <NotFound />,
+      },
+    ],
+  },
+  {
+    path: '/question',
+    element: <QuestionLayout />,
+    children: [
+      {
+        path: 'edit/:id',
+        element: <EditPage />,
+      },
+      {
+        path: 'stat/:id',
+        element: <StatPage />,
       },
     ],
   },

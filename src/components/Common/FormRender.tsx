@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Checkbox, Button, Space } from 'antd';
+import { Form, Input, Checkbox, Button, Space, Select, Switch } from 'antd';
 import { IFormItem, FormItemType } from '../../types/FormRender';
 import { Link } from 'react-router-dom';
 
@@ -31,9 +31,26 @@ export const FormRenderItem = (item: IFormItem) => {
       Item = (
         <Space>
           <Button {...item.option}>{item.label}</Button>
-          <Link to={item.option?.to}>{item.option?.linkText}</Link>
+          <Link to={item.option?.to}>{item.option?.linktext}</Link>
         </Space>
       );
+      break;
+    case 'Select':
+      Item = (
+        <Select {...item.option}>
+          {item.option.options.map((option: { label: string; value: string }) => (
+            <Select.Option key={option.value} value={option.value}>
+              {option.label}
+            </Select.Option>
+          ))}
+        </Select>
+      );
+      break;
+    case 'Switch':
+      Item = <Switch {...item.option} />;
+      break;
+    case 'Textarea':
+      Item = <Input.TextArea {...item.option} />;
       break;
   }
   return (

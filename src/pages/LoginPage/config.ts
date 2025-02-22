@@ -52,7 +52,7 @@ export const formConfig = (
       name: LOGIN_BUTTON_LINK_KEY,
       option: {
         to: REGISTER_PATHNAME,
-        linkText: '没有账号？去注册',
+        linktext: '没有账号？去注册',
         type: 'primary',
         htmlType: 'submit',
         size: 'large',

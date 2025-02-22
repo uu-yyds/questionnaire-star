@@ -4,8 +4,10 @@ import { MainLayoutWrapper } from '../styles/Layout';
 import { Layout } from 'antd';
 import Logo from '../components/MainLayout/Logo';
 import UserInfo from '../components/MainLayout/UserInfo';
+import { useNavPage } from '../hooks/useNavPage';
 
 const MainLayout = () => {
+  useNavPage();
   const { Header, Footer, Content } = Layout;
   return (
     <MainLayoutWrapper>

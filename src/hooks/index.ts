@@ -2,3 +2,8 @@ export * from './useTitle';
 export * from './useMouse';
 export * from './useGetInfo';
 export * from './useFormatDate';
+export * from './useLoading';
+export * from './useGetPageInfo';
+export * from './useBindCanvasKeyPress';
+export * from './useLoadingList';
+export * from './useNavPage';
