@@ -11,9 +11,9 @@ import { ComponentsState } from '../../stores/components_reducer';
 const StatList = (props: {
   componentId: string;
   setComponentId: (id: string) => void;
-  componentType: string;
+  setComponentType: (type: string) => void;
 }) => {
-  const { componentId, setComponentId, componentType } = props;
+  const { componentId, setComponentId, setComponentType } = props;
   const { id } = useParams();
   const [answerList, setAnswerList] = useState<answerItemType[]>([]);
   const [total, setTotal] = useState<number>(0);
@@ -48,13 +48,18 @@ const StatList = (props: {
     getAnswerListData(id || '', pagination);
   }, [id]);
 
+  const handleClick = (key: string) => {
+    setComponentId(key);
+    setComponentType(componentList.find(item => item?.fe_id === key)?.type || '');
+  };
+
   const columns = Object.keys(answerList[0] || {})
     .filter(key => key !== 'id')
     .map(key => ({
       title: (
         <div
           style={{ color: componentId === key ? '#1890ff' : '#000', cursor: 'pointer' }}
-          onClick={() => setComponentId(key)}
+          onClick={() => handleClick(key)}
         >
           {componentList.find(item => item?.fe_id === key)?.props?.title}
         </div>

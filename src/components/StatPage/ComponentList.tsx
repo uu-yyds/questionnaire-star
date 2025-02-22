@@ -21,6 +21,7 @@ const ComponentList = (props: ComponentListProps) => {
   const handleClick = (id: string, type: string) => {
     setSelectedId(id);
     setComponentType(type);
+    console.log(id, type);
   };
 
   return (

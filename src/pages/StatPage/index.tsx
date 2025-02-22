@@ -39,7 +39,7 @@ const StatPage = () => {
                 <StatList
                   componentId={selectedId}
                   setComponentId={setSelectedId}
-                  componentType={selectedComponentType}
+                  setComponentType={setSelectedComponentType}
                 />
               </div>
               <div className="right">
