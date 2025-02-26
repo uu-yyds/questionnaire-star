@@ -51,6 +51,7 @@
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
     "@craco/craco": "^7.1.0",
+    "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@types/lodash": "^4.17.15",
     "@types/mockjs": "^1.0.10",

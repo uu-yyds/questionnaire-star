@@ -9,6 +9,8 @@ import { changeSelectedId } from '../../stores/components_reducer';
 import LeftPanel from '../../components/EditPage/LeftPanel';
 import RightPanel from '../../components/EditPage/RightPanel';
 import EditHeader from '../../components/EditPage/EditHeader';
+import DynamicGridCanvas from '../../components/EditPage/DynamicGridCanvas';
+import SnapGuidesCanvas from '../../components/EditPage/SnapGuidesCanvas';
 import { useGetPageInfo } from '../../hooks';
 
 const EditPage = () => {
@@ -41,6 +43,8 @@ const EditPage = () => {
           </Content>
         </div>
       </EditPageWrapper>
+      {/* <DynamicGridCanvas /> */}
+      {/* <SnapGuidesCanvas /> */}
     </Spin>
   );
 };
